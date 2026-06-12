@@ -44,7 +44,15 @@
   .desc{color:#8b949e;font-size:12px}
   a{color:#58a6ff;text-decoration:none}
   a:hover{text-decoration:underline}
-</style>
+
+  .coll-desc{font-size:12px;color:#8b949e;padding:8px 16px 10px;border-bottom:1px solid #21262d;background:#0d1117;line-height:1.5}
+  .service-tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:4px;margin-left:8px;font-weight:500}
+  .service-tag.new-svc{background:#1a1040;color:#a371f7}
+  .service-tag.existing{background:#0d2d1a;color:#3fb950}
+  .badge-new{font-size:12px;background:#1a1040;color:#a371f7;padding:3px 10px;border-radius:20px;font-weight:600}
+  .new-table-block{border:1px solid #3d2b6e!important}
+  .new-table-header{background:#130d2b!important}
+  </style>
 </head>
 <body>
   <h1>📊 service-manager</h1>
@@ -70,6 +78,7 @@
         </div>
         
         
+        <div class="coll-desc">Tenants / white-labels. Cada compañía es un operador independiente de la plataforma.<span class="service-tag existing">→ company-service</span></div>
         <table>
           <thead>
             <tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr>
@@ -411,6 +420,7 @@
         </div>
         
         
+        <div class="coll-desc">Usuarios backoffice con rol Manager. Se consolida con agents en la tabla staff de PostgreSQL.<span class="service-tag existing">→ staff-service</span></div>
         <table>
           <thead>
             <tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr>
@@ -536,6 +546,7 @@
         </div>
         
         
+        <div class="coll-desc">Usuarios backoffice con rol Agent. Se consolida con managers en la tabla staff.<span class="service-tag existing">→ staff-service</span></div>
         <table>
           <thead>
             <tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr>
@@ -661,6 +672,7 @@
         </div>
         
         
+        <div class="coll-desc">Usuarios con acceso multi-compañía de alto nivel.<span class="service-tag existing">→ staff-service</span></div>
         <table>
           <thead>
             <tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr>
@@ -907,5 +919,319 @@
         </table>
       </div>
   <p style="margin-top:32px;font-size:12px;color:#30363d;text-align:center">Generado el 11 de junio de 2026</p>
+
+  <h2 style="color:#a371f7;font-size:15px;font-weight:600;margin:36px 0 16px;border-top:1px solid #30363d;padding-top:24px">🆕 Tablas nuevas — sin equivalente en MongoDB</h2>
+
+  <div class="collection-block new-table-block">
+    <div class="collection-header new-table-header">
+      <div class="header-left">
+        <span class="coll-label" style="color:#a371f7;background:#1a1040">PostgreSQL ONLY</span>
+        <span class="coll-name pg">identity_account</span>
+      </div>
+      <div class="header-right">
+        <span class="badge-new">🆕 Sin equivalente en MongoDB</span>
+      </div>
+    </div>
+    <div class="coll-desc">Fachada de identidad hacia Keycloak. Mapea companyId + email normalizado al username interno de Keycloak. Es el único servicio que interactúa con Keycloak Admin API.<span class="service-tag new-svc">→ identity-service</span></div>
+    <table>
+      <thead>
+        <tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="field-mongo na">—</td>
+          <td class="field-pg new">id</td>
+          <td class="status-pg">🆕 Nuevo</td>
+          <td class="desc">UUID PK</td>
+        </tr>
+        <tr>
+          <td class="field-mongo na">—</td>
+          <td class="field-pg new">company_id</td>
+          <td class="status-pg">🆕 Nuevo</td>
+          <td class="desc">UUID FK → companies</td>
+        </tr>
+        <tr>
+          <td class="field-mongo na">—</td>
+          <td class="field-pg new">email</td>
+          <td class="status-pg">🆕 Nuevo</td>
+          <td class="desc">EMAIL de negocio (no el username de Keycloak)</td>
+        </tr>
+        <tr>
+          <td class="field-mongo na">—</td>
+          <td class="field-pg new">keycloak_user_id</td>
+          <td class="status-pg">🆕 Nuevo</td>
+          <td class="desc">ID del usuario en Keycloak</td>
+        </tr>
+        <tr>
+          <td class="field-mongo na">—</td>
+          <td class="field-pg new">username_keycloak</td>
+          <td class="status-pg">🆕 Nuevo</td>
+          <td class="desc">Username interno: companyId::normalizedEmail</td>
+        </tr>
+        <tr>
+          <td class="field-mongo na">—</td>
+          <td class="field-pg new">status</td>
+          <td class="status-pg">🆕 Nuevo</td>
+          <td class="desc">ACTIVE / SUSPENDED</td>
+        </tr>
+        <tr>
+          <td class="field-mongo na">—</td>
+          <td class="field-pg new">created_at / updated_at</td>
+          <td class="status-pg">🆕 Nuevo</td>
+          <td class="desc">TIMESTAMPTZ</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="collection-block new-table-block">
+    <div class="collection-header new-table-header">
+      <div class="header-left">
+        <span class="coll-label" style="color:#a371f7;background:#1a1040">PostgreSQL ONLY</span>
+        <span class="coll-name pg">staff_user</span>
+      </div>
+      <div class="header-right">
+        <span class="badge-new">🆕 Sin equivalente en MongoDB</span>
+      </div>
+    </div>
+    <div class="coll-desc">Usuario de backoffice unificado (manager, agent, supervisor, master admin). Reemplaza las colecciones managers, agents y mastermanagers que estaban separadas en MongoDB.<span class="service-tag new-svc">→ staff-service</span></div>
+    <table>
+      <thead>
+        <tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="field-mongo na">—</td>
+          <td class="field-pg new">id</td>
+          <td class="status-pg">🆕 Nuevo</td>
+          <td class="desc">UUID PK</td>
+        </tr>
+        <tr>
+          <td class="field-mongo na">—</td>
+          <td class="field-pg new">company_id</td>
+          <td class="status-pg">🆕 Nuevo</td>
+          <td class="desc">UUID FK → companies</td>
+        </tr>
+        <tr>
+          <td class="field-mongo na">—</td>
+          <td class="field-pg new">email</td>
+          <td class="status-pg">🆕 Nuevo</td>
+          <td class="desc">TEXT UNIQUE</td>
+        </tr>
+        <tr>
+          <td class="field-mongo na">—</td>
+          <td class="field-pg new">username</td>
+          <td class="status-pg">🆕 Nuevo</td>
+          <td class="desc">TEXT</td>
+        </tr>
+        <tr>
+          <td class="field-mongo na">—</td>
+          <td class="field-pg new">first_name / last_name</td>
+          <td class="status-pg">🆕 Nuevo</td>
+          <td class="desc">TEXT</td>
+        </tr>
+        <tr>
+          <td class="field-mongo na">—</td>
+          <td class="field-pg new">status</td>
+          <td class="status-pg">🆕 Nuevo</td>
+          <td class="desc">ACTIVE / INACTIVE</td>
+        </tr>
+        <tr>
+          <td class="field-mongo na">—</td>
+          <td class="field-pg new">keycloak_user_id</td>
+          <td class="status-pg">🆕 Nuevo</td>
+          <td class="desc">Vínculo con Keycloak</td>
+        </tr>
+        <tr>
+          <td class="field-mongo na">—</td>
+          <td class="field-pg new">created_at / updated_at</td>
+          <td class="status-pg">🆕 Nuevo</td>
+          <td class="desc">TIMESTAMPTZ</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="collection-block new-table-block">
+    <div class="collection-header new-table-header">
+      <div class="header-left">
+        <span class="coll-label" style="color:#a371f7;background:#1a1040">PostgreSQL ONLY</span>
+        <span class="coll-name pg">staff_role</span>
+      </div>
+      <div class="header-right">
+        <span class="badge-new">🆕 Sin equivalente en MongoDB</span>
+      </div>
+    </div>
+    <div class="coll-desc">Roles dinámicos de RBAC. Reemplaza el enum fijo de roles de MongoDB (MANAGER, AGENT...) por roles configurables por compañía.<span class="service-tag new-svc">→ staff-service</span></div>
+    <table>
+      <thead>
+        <tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="field-mongo na">—</td>
+          <td class="field-pg new">id</td>
+          <td class="status-pg">🆕 Nuevo</td>
+          <td class="desc">UUID PK</td>
+        </tr>
+        <tr>
+          <td class="field-mongo na">—</td>
+          <td class="field-pg new">company_id</td>
+          <td class="status-pg">🆕 Nuevo</td>
+          <td class="desc">UUID FK → companies (NULL = rol global)</td>
+        </tr>
+        <tr>
+          <td class="field-mongo na">—</td>
+          <td class="field-pg new">name</td>
+          <td class="status-pg">🆕 Nuevo</td>
+          <td class="desc">Nombre del rol: MANAGER, SUPERVISOR, etc.</td>
+        </tr>
+        <tr>
+          <td class="field-mongo na">—</td>
+          <td class="field-pg new">description</td>
+          <td class="status-pg">🆕 Nuevo</td>
+          <td class="desc">TEXT</td>
+        </tr>
+        <tr>
+          <td class="field-mongo na">—</td>
+          <td class="field-pg new">created_at</td>
+          <td class="status-pg">🆕 Nuevo</td>
+          <td class="desc">TIMESTAMPTZ</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="collection-block new-table-block">
+    <div class="collection-header new-table-header">
+      <div class="header-left">
+        <span class="coll-label" style="color:#a371f7;background:#1a1040">PostgreSQL ONLY</span>
+        <span class="coll-name pg">staff_permission</span>
+      </div>
+      <div class="header-right">
+        <span class="badge-new">🆕 Sin equivalente en MongoDB</span>
+      </div>
+    </div>
+    <div class="coll-desc">Permisos granulares del sistema (ej. transactions:read, customers:write). No existían en MongoDB — los permisos eran implícitos por rol.<span class="service-tag new-svc">→ staff-service</span></div>
+    <table>
+      <thead>
+        <tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="field-mongo na">—</td>
+          <td class="field-pg new">id</td>
+          <td class="status-pg">🆕 Nuevo</td>
+          <td class="desc">UUID PK</td>
+        </tr>
+        <tr>
+          <td class="field-mongo na">—</td>
+          <td class="field-pg new">key</td>
+          <td class="status-pg">🆕 Nuevo</td>
+          <td class="desc">TEXT UNIQUE — ej. customers:write</td>
+        </tr>
+        <tr>
+          <td class="field-mongo na">—</td>
+          <td class="field-pg new">description</td>
+          <td class="status-pg">🆕 Nuevo</td>
+          <td class="desc">TEXT</td>
+        </tr>
+        <tr>
+          <td class="field-mongo na">—</td>
+          <td class="field-pg new">module</td>
+          <td class="status-pg">🆕 Nuevo</td>
+          <td class="desc">Módulo al que pertenece: customers, transactions, etc.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="collection-block new-table-block">
+    <div class="collection-header new-table-header">
+      <div class="header-left">
+        <span class="coll-label" style="color:#a371f7;background:#1a1040">PostgreSQL ONLY</span>
+        <span class="coll-name pg">staff_role_permission</span>
+      </div>
+      <div class="header-right">
+        <span class="badge-new">🆕 Sin equivalente en MongoDB</span>
+      </div>
+    </div>
+    <div class="coll-desc">Tabla de unión role ↔ permission. Define qué permisos tiene cada rol (muchos a muchos).<span class="service-tag new-svc">→ staff-service</span></div>
+    <table>
+      <thead>
+        <tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="field-mongo na">—</td>
+          <td class="field-pg new">role_id</td>
+          <td class="status-pg">🆕 Nuevo</td>
+          <td class="desc">UUID FK → staff_role</td>
+        </tr>
+        <tr>
+          <td class="field-mongo na">—</td>
+          <td class="field-pg new">permission_id</td>
+          <td class="status-pg">🆕 Nuevo</td>
+          <td class="desc">UUID FK → staff_permission</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="collection-block new-table-block">
+    <div class="collection-header new-table-header">
+      <div class="header-left">
+        <span class="coll-label" style="color:#a371f7;background:#1a1040">PostgreSQL ONLY</span>
+        <span class="coll-name pg">staff_company_assignment</span>
+      </div>
+      <div class="header-right">
+        <span class="badge-new">🆕 Sin equivalente en MongoDB</span>
+      </div>
+    </div>
+    <div class="coll-desc">Asignación de un usuario de staff a una o más compañías con rol específico. Habilita el modelo multi-company.<span class="service-tag new-svc">→ staff-service</span></div>
+    <table>
+      <thead>
+        <tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="field-mongo na">—</td>
+          <td class="field-pg new">id</td>
+          <td class="status-pg">🆕 Nuevo</td>
+          <td class="desc">UUID PK</td>
+        </tr>
+        <tr>
+          <td class="field-mongo na">—</td>
+          <td class="field-pg new">staff_user_id</td>
+          <td class="status-pg">🆕 Nuevo</td>
+          <td class="desc">UUID FK → staff_user</td>
+        </tr>
+        <tr>
+          <td class="field-mongo na">—</td>
+          <td class="field-pg new">company_id</td>
+          <td class="status-pg">🆕 Nuevo</td>
+          <td class="desc">UUID FK → companies</td>
+        </tr>
+        <tr>
+          <td class="field-mongo na">—</td>
+          <td class="field-pg new">role_id</td>
+          <td class="status-pg">🆕 Nuevo</td>
+          <td class="desc">UUID FK → staff_role</td>
+        </tr>
+        <tr>
+          <td class="field-mongo na">—</td>
+          <td class="field-pg new">status</td>
+          <td class="status-pg">🆕 Nuevo</td>
+          <td class="desc">ACTIVE / INACTIVE</td>
+        </tr>
+        <tr>
+          <td class="field-mongo na">—</td>
+          <td class="field-pg new">created_at</td>
+          <td class="status-pg">🆕 Nuevo</td>
+          <td class="desc">TIMESTAMPTZ</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </body>
 </html>

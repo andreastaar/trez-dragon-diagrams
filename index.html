@@ -2,46 +2,73 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Trez — DRAGON 2.0 Diagrams</title>
+<title>Schema Comparison — Trez</title>
 <style>
-body{font-family:-apple-system,sans-serif;background:#0f172a;color:#e2e8f0;margin:0;padding:40px}
-h1{color:#60a5fa;font-size:1.8rem;margin-bottom:4px}
-p{color:#94a3b8;margin-top:0}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:32px}
-.section{background:#1e293b;border-radius:12px;padding:24px}
-h2{color:#38bdf8;font-size:1.1rem;margin-top:0;border-bottom:1px solid #334155;padding-bottom:12px}
-a{display:block;color:#7dd3fc;text-decoration:none;padding:8px 12px;border-radius:6px;margin:4px 0;font-size:.9rem}
-a:hover{background:#334155;color:#bae6fd}
-.badge{font-size:.7rem;background:#1e3a5f;color:#60a5fa;padding:2px 8px;border-radius:10px;margin-left:8px}
-</style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0d1117;color:#c9d1d9;padding:40px;max-width:860px;margin:0 auto}
+  h1{font-size:26px;color:#58a6ff;margin-bottom:6px}
+  p{color:#6e7681;margin-bottom:32px;font-size:14px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+  .card{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:18px;text-decoration:none;color:inherit;display:block;transition:border-color .15s}
+  .card:hover{border-color:#58a6ff}
+  .card h2{font-size:14px;color:#ffa657;margin-bottom:6px;font-family:'SF Mono',Monaco,monospace}
+  .card p{font-size:12px;color:#6e7681;line-height:1.5}
+  .tag{display:inline-block;font-size:11px;background:#0d2d6e;color:#58a6ff;padding:2px 8px;border-radius:20px;margin-top:10px}
+
+  .coll-desc{font-size:12px;color:#8b949e;padding:8px 16px 10px;border-bottom:1px solid #21262d;background:#0d1117;line-height:1.5}
+  .service-tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:4px;margin-left:8px;font-weight:500}
+  .service-tag.new-svc{background:#1a1040;color:#a371f7}
+  .service-tag.existing{background:#0d2d1a;color:#3fb950}
+  .badge-new{font-size:12px;background:#1a1040;color:#a371f7;padding:3px 10px;border-radius:20px;font-weight:600}
+  .new-table-block{border:1px solid #3d2b6e!important}
+  .new-table-header{background:#130d2b!important}
+  </style>
 </head>
 <body>
-<h1>🐉 DRAGON 2.0 — Diagrams</h1>
-<p>Trez Platform · MongoDB → PostgreSQL Migration · PostgreSQL v3 Schema</p>
-<div class="grid">
-  <div class="section">
-    <h2>📊 ER Diagrams — PostgreSQL v3 <span class="badge">Mermaid.js</span></h2>
-    <a href="ER_01_company.html">ER_01 — Company &amp; Hierarchies</a>
-    <a href="ER_02_identity_staff.html">ER_02 — Identity &amp; Staff (RBAC)</a>
-    <a href="ER_03_customer.html">ER_03 — Customer</a>
-    <a href="ER_04_accounts.html">ER_04 — Accounts &amp; Ledger</a>
-    <a href="ER_05_game.html">ER_05 — Game</a>
-    <a href="ER_06_payment.html">ER_06 — Payment</a>
-    <a href="ER_07_transaction.html">ER_07 — Transaction &amp; Movements</a>
-    <a href="ER_08_reward.html">ER_08 — Reward &amp; Prizes</a>
-    <a href="ER_09_promotion.html">ER_09 — Promohub</a>
+  <h1>🗺️ Schema Comparison — Trez Platform</h1>
+  <p>MongoDB vs PostgreSQL · Migration Analysis · 11 de junio de 2026</p>
+  <div class="grid">
+    
+    <a class="card" href="service-manager.html">
+      <h2>service-manager</h2>
+      <p>companies, managers, agents, mastermanagers...</p>
+      <span class="tag">Ver comparación →</span>
+    </a>
+    <a class="card" href="service-customer.html">
+      <h2>service-customer</h2>
+      <p>customers, hierarchies, spams, customer-tags...</p>
+      <span class="tag">Ver comparación →</span>
+    </a>
+    <a class="card" href="service-games.html">
+      <h2>service-games</h2>
+      <p>gamecatalogs, gamecompanies, gameclients</p>
+      <span class="tag">Ver comparación →</span>
+    </a>
+    <a class="card" href="service-transaction.html">
+      <h2>service-transaction</h2>
+      <p>transactions, paymentmethods, payment-providers, transfer-platform...</p>
+      <span class="tag">Ver comparación →</span>
+    </a>
+    <a class="card" href="service-movement.html">
+      <h2>service-movement</h2>
+      <p>movements</p>
+      <span class="tag">Ver comparación →</span>
+    </a>
+    <a class="card" href="service-reward.html">
+      <h2>service-reward</h2>
+      <p>prizes, drawers, prize-roulettes, roulette-winners...</p>
+      <span class="tag">Ver comparación →</span>
+    </a>
+    <a class="card" href="service-promohub.html">
+      <h2>service-promohub</h2>
+      <p>promotional-banners, image-slides, content-modals, happy-hours...</p>
+      <span class="tag">Ver comparación →</span>
+    </a>
+    <a class="card" href="service-game-admin.html">
+      <h2>service-game-admin</h2>
+      <p>game_admin_credentials, game_admin_accounts, game_version_credential_types, credential_types</p>
+      <span class="tag">Ver comparación →</span>
+    </a>
   </div>
-  <div class="section">
-    <h2>🔍 Schema Comparison — MongoDB vs PostgreSQL</h2>
-    <a href="service-customer.html">service-customer</a>
-    <a href="service-game-admin.html">service-game-admin</a>
-    <a href="service-games.html">service-games</a>
-    <a href="service-manager.html">service-manager</a>
-    <a href="service-movement.html">service-movement</a>
-    <a href="service-promohub.html">service-promohub</a>
-    <a href="service-reward.html">service-reward</a>
-    <a href="service-transaction.html">service-transaction</a>
-  </div>
-</div>
 </body>
 </html>

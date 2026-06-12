@@ -44,7 +44,15 @@
   .desc{color:#8b949e;font-size:12px}
   a{color:#58a6ff;text-decoration:none}
   a:hover{text-decoration:underline}
-</style>
+
+  .coll-desc{font-size:12px;color:#8b949e;padding:8px 16px 10px;border-bottom:1px solid #21262d;background:#0d1117;line-height:1.5}
+  .service-tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:4px;margin-left:8px;font-weight:500}
+  .service-tag.new-svc{background:#1a1040;color:#a371f7}
+  .service-tag.existing{background:#0d2d1a;color:#3fb950}
+  .badge-new{font-size:12px;background:#1a1040;color:#a371f7;padding:3px 10px;border-radius:20px;font-weight:600}
+  .new-table-block{border:1px solid #3d2b6e!important}
+  .new-table-header{background:#130d2b!important}
+  </style>
 </head>
 <body>
   <h1>📊 service-transaction</h1>
@@ -70,6 +78,7 @@
         </div>
         
         
+        <div class="coll-desc">Transacciones de compra y canje con lifecycle completo (PENDING → COMPLETED).<span class="service-tag existing">→ transaction-service</span></div>
         <table>
           <thead>
             <tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr>
@@ -345,6 +354,7 @@
         </div>
         
         
+        <div class="coll-desc">Métodos de pago disponibles por proveedor.<span class="service-tag existing">→ payment-service</span></div>
         <table>
           <thead>
             <tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr>
@@ -548,6 +558,7 @@
         </div>
         
         
+        <div class="coll-desc">Proveedores de pago integrados (Yappy, PayValid, etc.).<span class="service-tag existing">→ payment-service</span></div>
         <table>
           <thead>
             <tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr>
@@ -768,6 +779,7 @@
         </div>
         
         
+        <div class="coll-desc">Cashtags generados para transacciones de compra.<span class="service-tag existing">→ payment-service</span></div>
         <table>
           <thead>
             <tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr>
@@ -875,6 +887,7 @@
         </div>
         
         
+        <div class="coll-desc">Relación proveedor–método con fees y configuración por compañía.<span class="service-tag existing">→ payment-service</span></div>
         <table>
           <thead>
             <tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr>
@@ -964,6 +977,7 @@
         </div>
         
         
+        <div class="coll-desc">Detalles adicionales del método de pago (instrucciones, campos extra).<span class="service-tag existing">→ payment-service</span></div>
         <table>
           <thead>
             <tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr>

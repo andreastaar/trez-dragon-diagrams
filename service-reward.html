@@ -44,7 +44,15 @@
   .desc{color:#8b949e;font-size:12px}
   a{color:#58a6ff;text-decoration:none}
   a:hover{text-decoration:underline}
-</style>
+
+  .coll-desc{font-size:12px;color:#8b949e;padding:8px 16px 10px;border-bottom:1px solid #21262d;background:#0d1117;line-height:1.5}
+  .service-tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:4px;margin-left:8px;font-weight:500}
+  .service-tag.new-svc{background:#1a1040;color:#a371f7}
+  .service-tag.existing{background:#0d2d1a;color:#3fb950}
+  .badge-new{font-size:12px;background:#1a1040;color:#a371f7;padding:3px 10px;border-radius:20px;font-weight:600}
+  .new-table-block{border:1px solid #3d2b6e!important}
+  .new-table-header{background:#130d2b!important}
+  </style>
 </head>
 <body>
   <h1>📊 service-reward</h1>
@@ -70,6 +78,7 @@
         </div>
         
         
+        <div class="coll-desc">Premios del marketplace: físicos, digitales o en saldo.<span class="service-tag existing">→ reward-service</span></div>
         <table>
           <thead>
             <tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr>
@@ -260,6 +269,7 @@
         </div>
         
         
+        <div class="coll-desc">Ruletas de premios con cantidades y probabilidades.<span class="service-tag existing">→ reward-service</span></div>
         <table>
           <thead>
             <tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr>
@@ -361,6 +371,7 @@
         </div>
         
         
+        <div class="coll-desc">Ganadores de ruletas.<span class="service-tag existing">→ reward-service</span></div>
         <table>
           <thead>
             <tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr>
@@ -450,6 +461,7 @@
         </div>
         
         
+        <div class="coll-desc">Ganadores de sorteos con datos del cliente.<span class="service-tag existing">→ reward-service</span></div>
         <table>
           <thead>
             <tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr>
@@ -551,6 +563,7 @@
         </div>
         
         
+        <div class="coll-desc">Tiendas del marketplace de premios.<span class="service-tag existing">→ reward-service</span></div>
         <table>
           <thead>
             <tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr>
@@ -610,6 +623,7 @@
         </div>
         
         
+        <div class="coll-desc">Productos disponibles en las tiendas.<span class="service-tag existing">→ reward-service</span></div>
         <table>
           <thead>
             <tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr>
@@ -741,6 +755,7 @@
         </div>
         
         
+        <div class="coll-desc">Historial de compras en el marketplace.<span class="service-tag existing">→ reward-service</span></div>
         <table>
           <thead>
             <tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr>
