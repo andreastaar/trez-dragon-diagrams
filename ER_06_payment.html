@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8">
+<title>Trez v3 — Payment</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+body{font-family:-apple-system,sans-serif;background:#f8fafc;margin:0;padding:20px}
+h1{color:#1e3a5f;font-size:1.4rem;margin-bottom:4px}
+p{color:#64748b;font-size:.85rem;margin-top:0}
+.mermaid{background:white;border-radius:12px;padding:24px;box-shadow:0 1px 6px rgba(0,0,0,.08)}
+.badge{display:inline-block;background:#1e3a5f;color:white;border-radius:6px;padding:2px 10px;font-size:.75rem;margin-left:8px;vertical-align:middle}
+</style></head><body>
+<h1>🐉 DRAGON 2.0 — Payment <span class="badge">PostgreSQL v3</span></h1>
+<p>Schema Trez Platform · Migración MongoDB → PostgreSQL · ER_06_payment</p>
+<div class="mermaid">
+erDiagram
+    payment_providers {
+        uuid id PK
+        varchar mongo_id FK
+        text name
+        text type
+        text description
+        numeric fee_percentage
+        text public_key
+        text private_key
+        jsonb config
+        text status
+        timestamptz created_at
+        timestamptz updated_at
+    }
+    payment_methods {
+        uuid id PK
+        varchar mongo_id FK
+        uuid company_id FK
+        text name
+        text name_code FK
+        text type
+        text info_message
+        text img_url
+        text img_mobile_url
+        text status
+        timestamptz created_at
+        timestamptz updated_at
+    }
+    payment_method_details {
+        uuid id PK
+        varchar mongo_id FK
+        uuid payment_method_id FK
+        numeric min_amount
+        numeric max_amount
+        jsonb bonus_config
+        jsonb provider_fees
+        jsonb buttons
+        jsonb rates
+        jsonb schedules
+        timestamptz created_at
+        timestamptz updated_at
+    }
+    provider_payment_methods {
+        uuid id PK
+        varchar mongo_id FK
+        uuid provider_id FK
+        text provider_name
+        uuid payment_method_id FK
+        boolean company_paying_deposit_fee
+        boolean company_paying_dovera_fee
+        boolean company_paying_dragon_fee
+        boolean company_paying_provider_fee
+        jsonb api_keys
+        jsonb config
+        text status
+        timestamptz created_at
+        timestamptz updated_at
+    }
+    gateway_configs {
+        uuid id PK
+        varchar mongo_id FK
+        uuid provider_id FK
+        text gateway
+        jsonb credentials
+        text status
+        timestamptz created_at
+        timestamptz updated_at
+    }
+    purchase_cashtags {
+        uuid id PK
+        varchar mongo_id FK
+        uuid customer_id FK
+        uuid company_id FK
+        text cashtag
+        numeric amount
+        boolean redeemed
+        timestamptz redeemed_at
+        timestamptz created_at
+    }
+    transfer_platforms {
+        uuid id PK
+        varchar mongo_id FK
+        uuid customer_id FK
+        uuid company_id FK
+        text operation_code FK
+        text from_platform
+        text to_platform
+        numeric request_amount
+        numeric amount
+        numeric bonus
+        numeric rollover
+        numeric total_amount
+        uuid manager_id FK
+        text manager_username
+        uuid player_id FK
+        text player_username
+        text player_email
+        text timezone
+        text reason
+        text status
+        uuid approved_by
+        timestamptz approved_at
+        jsonb metadata
+        timestamptz created_at
+        timestamptz updated_at
+    }
+    payment_methods ||--o{ payment_method_details : "payment_method_id"
+    payment_providers ||--o{ provider_payment_methods : "provider_id"
+    payment_methods ||--o{ provider_payment_methods : "payment_method_id"
+    payment_providers ||--o{ gateway_configs : "provider_id"
+</div>
+<script>mermaid.initialize({startOnLoad:true,theme:'default',er:{diagramPadding:30}});</script>
+</body></html>

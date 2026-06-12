@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8">
+<title>Trez v3 — Company & Hierarchies</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+body{font-family:-apple-system,sans-serif;background:#f8fafc;margin:0;padding:20px}
+h1{color:#1e3a5f;font-size:1.4rem;margin-bottom:4px}
+p{color:#64748b;font-size:.85rem;margin-top:0}
+.mermaid{background:white;border-radius:12px;padding:24px;box-shadow:0 1px 6px rgba(0,0,0,.08)}
+.badge{display:inline-block;background:#1e3a5f;color:white;border-radius:6px;padding:2px 10px;font-size:.75rem;margin-left:8px;vertical-align:middle}
+</style></head><body>
+<h1>🐉 DRAGON 2.0 — Company & Hierarchies <span class="badge">PostgreSQL v3</span></h1>
+<p>Schema Trez Platform · Migración MongoDB → PostgreSQL · ER_01_company</p>
+<div class="mermaid">
+erDiagram
+    companies {
+        uuid id PK
+        varchar mongo_id FK
+        text name
+        text slug
+        text keycloak_organization_id FK
+        company_status status
+        text domain
+        jsonb features
+        text_array payment_providers
+        text_array game_providers
+        jsonb config
+        numeric cashout_limit
+        numeric max_cashout_per_day
+        jsonb cashout_schedule
+        text timezone
+        boolean show_transaction_fees
+        integer initial_spins
+        text logo_url
+        text logo_url_png
+        text logo_url_svg
+        text icon
+        jsonb colors
+        jsonb colors_v3
+        text email
+        text notification_email
+    }
+    apps_versions {
+        uuid id PK
+        varchar mongo_id FK
+        uuid company_id FK
+        text customer_version
+        text manager_version
+        timestamptz created_at
+        timestamptz updated_at
+    }
+    hierarchies {
+        uuid id PK
+        varchar mongo_id FK
+        uuid company_id FK
+        text name
+        integer level
+        integer weight
+        numeric min_point
+        numeric max_point
+        text color
+        text logo
+        numeric points
+        numeric roulette
+        boolean status
+        timestamptz created_at
+        timestamptz updated_at
+    }
+    cashout_rules {
+        uuid id PK
+        varchar mongo_id FK
+        uuid company_id FK
+        text name
+        jsonb rules
+        timestamptz created_at
+        timestamptz updated_at
+    }
+    companies ||--o{ apps_versions : "company_id"
+    companies ||--o{ hierarchies : "company_id"
+    companies ||--o{ cashout_rules : "company_id"
+</div>
+<script>mermaid.initialize({startOnLoad:true,theme:'default',er:{diagramPadding:30}});</script>
+</body></html>

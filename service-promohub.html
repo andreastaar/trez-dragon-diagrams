@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>service-promohub — Schema Comparison</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0d1117;color:#c9d1d9;padding:32px;min-height:100vh}
+  h1{font-size:20px;color:#58a6ff;margin-bottom:4px}
+  .subtitle{font-size:13px;color:#6e7681;margin-bottom:8px}
+  .top-badges{display:flex;gap:10px;margin-bottom:28px;flex-wrap:wrap}
+  .top-badge{font-size:12px;padding:4px 12px;border-radius:20px;font-weight:500}
+  .top-badge.warn{background:#3d1f00;color:#f0883e}
+  .top-badge.info{background:#0d2d6e;color:#58a6ff}
+  .collection-block{background:#161b22;border:1px solid #30363d;border-radius:8px;margin-bottom:24px;overflow:hidden}
+  .collection-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#0d1117;border-bottom:1px solid #21262d;flex-wrap:wrap;gap:8px}
+  .header-left{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .header-right{display:flex;align-items:center;gap:8px}
+  .coll-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#6e7681;background:#21262d;padding:2px 7px;border-radius:4px}
+  .coll-label.pg{color:#58a6ff}
+  .coll-name{font-size:14px;font-weight:600;color:#e6edf3;font-family:'SF Mono',Monaco,monospace}
+  .coll-name.pg{color:#58a6ff}
+  .arrow{color:#3fb950;font-size:16px}
+  .count{font-size:12px;color:#6e7681;background:#21262d;padding:3px 10px;border-radius:20px}
+  .badge-missing{font-size:12px;background:#3d1f00;color:#f0883e;padding:3px 10px;border-radius:20px;font-weight:500}
+  .badge-ok{font-size:12px;background:#0f2d1a;color:#3fb950;padding:3px 10px;border-radius:20px;font-weight:500}
+  .error-row{padding:10px 16px;color:#f85149;font-size:13px;background:#1a0a0a}
+  .empty-row{padding:16px;color:#6e7681;font-size:13px;text-align:center}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  thead tr{background:#0d1117}
+  th{text-align:left;padding:9px 14px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#6e7681;border-bottom:1px solid #21262d;font-weight:500}
+  td{padding:8px 14px;border-bottom:1px solid #161b22;vertical-align:middle}
+  tr:hover td{background:#1c2128}
+  .field-mongo{font-family:'SF Mono',Monaco,monospace;color:#ffa657;font-size:12px}
+  .field-pg{font-family:'SF Mono',Monaco,monospace;font-size:12px}
+  .field-pg.match{color:#58a6ff}
+  .field-pg.missing{color:#f85149}
+  .field-pg.new{color:#a371f7}
+  .status-ok{color:#3fb950;font-size:12px;white-space:nowrap}
+  .status-missing{color:#f0883e;font-size:12px;white-space:nowrap;font-weight:600}
+  .status-pg{color:#a371f7;font-size:12px;white-space:nowrap}
+  .pg-only td{opacity:.55}
+  .na{color:#30363d!important}
+  .desc{color:#8b949e;font-size:12px}
+  a{color:#58a6ff;text-decoration:none}
+  a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+  <h1>📊 service-promohub</h1>
+  <p class="subtitle">MongoDB vs PostgreSQL · Trez Platform Migration</p>
+  <div class="top-badges">
+    <span class="top-badge warn">⚠️ 38 campos faltantes en total</span>
+    <span class="top-badge info">🐘 Comparando contra schema PG v3</span>
+  </div>
+  
+      <div class="collection-block">
+        <div class="collection-header">
+          <div class="header-left">
+            <span class="coll-label">MongoDB</span>
+            <span class="coll-name">promotional-banners</span>
+            <span class="arrow">→</span>
+            <span class="coll-label pg">PostgreSQL</span>
+            <span class="coll-name pg">promotional_banners</span>
+          </div>
+          <div class="header-right">
+            <span class="count">7 docs</span>
+            <span class="badge-missing">⚠️ 4 campos faltantes</span>
+          </div>
+        </div>
+        
+        
+        <table>
+          <thead>
+            <tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="field-mongo">_id</td>
+          <td class="field-pg match">mongo_id</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">ID único de MongoDB</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">name</td>
+          <td class="field-pg missing">name</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">Nombre</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">imgDesktop</td>
+          <td class="field-pg missing">img_desktop</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">—</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">imgMobile</td>
+          <td class="field-pg missing">img_mobile</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">—</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">date</td>
+          <td class="field-pg missing">date</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">—</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">createdAt</td>
+          <td class="field-pg match">created_at</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">Fecha de creación</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">updatedAt</td>
+          <td class="field-pg match">updated_at</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">Última actualización</td>
+        </tr>
+      <tr class="pg-only">
+        <td class="field-mongo na">—</td>
+        <td class="field-pg new">company_id</td>
+        <td class="status-pg">🆕 Solo en PG</td>
+        <td class="desc">ID de la empresa (FK)</td>
+      </tr>
+      <tr class="pg-only">
+        <td class="field-mongo na">—</td>
+        <td class="field-pg new">title</td>
+        <td class="status-pg">🆕 Solo en PG</td>
+        <td class="desc">Título del banner</td>
+      </tr>
+      <tr class="pg-only">
+        <td class="field-mongo na">—</td>
+        <td class="field-pg new">desktop_image</td>
+        <td class="status-pg">🆕 Solo en PG</td>
+        <td class="desc">Imagen para desktop</td>
+      </tr>
+      <tr class="pg-only">
+        <td class="field-mongo na">—</td>
+        <td class="field-pg new">mobile_image</td>
+        <td class="status-pg">🆕 Solo en PG</td>
+        <td class="desc">Imagen para móvil</td>
+      </tr>
+      <tr class="pg-only">
+        <td class="field-mongo na">—</td>
+        <td class="field-pg new">url</td>
+        <td class="status-pg">🆕 Solo en PG</td>
+        <td class="desc">URL de destino</td>
+      </tr>
+      <tr class="pg-only">
+        <td class="field-mongo na">—</td>
+        <td class="field-pg new">active</td>
+        <td class="status-pg">🆕 Solo en PG</td>
+        <td class="desc">Activo/inactivo</td>
+      </tr>
+      <tr class="pg-only">
+        <td class="field-mongo na">—</td>
+        <td class="field-pg new">order</td>
+        <td class="status-pg">🆕 Solo en PG</td>
+        <td class="desc">—</td>
+      </tr></tbody>
+        </table>
+      </div>
+      <div class="collection-block">
+        <div class="collection-header">
+          <div class="header-left">
+            <span class="coll-label">MongoDB</span>
+            <span class="coll-name">image-slides</span>
+            <span class="arrow">→</span>
+            <span class="coll-label pg">PostgreSQL</span>
+            <span class="coll-name pg">image_slides</span>
+          </div>
+          <div class="header-right">
+            <span class="count">471 docs</span>
+            <span class="badge-missing">⚠️ 6 campos faltantes</span>
+          </div>
+        </div>
+        
+        
+        <table>
+          <thead>
+            <tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="field-mongo">_id</td>
+          <td class="field-pg match">mongo_id</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">ID único de MongoDB</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">companyId</td>
+          <td class="field-pg match">company_id</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">ID de la empresa (FK)</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">name</td>
+          <td class="field-pg missing">name</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">Nombre</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">type</td>
+          <td class="field-pg missing">type</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">Tipo de operación</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">status</td>
+          <td class="field-pg missing">status</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">Estado activo/inactivo</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">imgDesktopUrl</td>
+          <td class="field-pg missing">img_desktop_url</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">—</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">imgMobileUrl</td>
+          <td class="field-pg missing">img_mobile_url</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">—</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">order</td>
+          <td class="field-pg match">order</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">—</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">link</td>
+          <td class="field-pg missing">link</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">—</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">createdAt</td>
+          <td class="field-pg match">created_at</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">Fecha de creación</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">updatedAt</td>
+          <td class="field-pg match">updated_at</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">Última actualización</td>
+        </tr>
+      <tr class="pg-only">
+        <td class="field-mongo na">—</td>
+        <td class="field-pg new">desktop_url</td>
+        <td class="status-pg">🆕 Solo en PG</td>
+        <td class="desc">—</td>
+      </tr>
+      <tr class="pg-only">
+        <td class="field-mongo na">—</td>
+        <td class="field-pg new">mobile_url</td>
+        <td class="status-pg">🆕 Solo en PG</td>
+        <td class="desc">—</td>
+      </tr>
+      <tr class="pg-only">
+        <td class="field-mongo na">—</td>
+        <td class="field-pg new">active</td>
+        <td class="status-pg">🆕 Solo en PG</td>
+        <td class="desc">Activo/inactivo</td>
+      </tr></tbody>
+        </table>
+      </div>
+      <div class="collection-block">
+        <div class="collection-header">
+          <div class="header-left">
+            <span class="coll-label">MongoDB</span>
+            <span class="coll-name">content-modals</span>
+            <span class="arrow">→</span>
+            <span class="coll-label pg">PostgreSQL</span>
+            <span class="coll-name pg">content_modals</span>
+          </div>
+          <div class="header-right">
+            <span class="count">105 docs</span>
+            <span class="badge-missing">⚠️ 3 campos faltantes</span>
+          </div>
+        </div>
+        
+        
+        <table>
+          <thead>
+            <tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="field-mongo">_id</td>
+          <td class="field-pg match">mongo_id</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">ID único de MongoDB</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">companyId</td>
+          <td class="field-pg match">company_id</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">ID de la empresa (FK)</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">imageUpdateDate</td>
+          <td class="field-pg missing">image_update_date</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">—</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">status</td>
+          <td class="field-pg missing">status</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">Estado activo/inactivo</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">contentModalTypeId</td>
+          <td class="field-pg missing">content_modal_type_id</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">—</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">images</td>
+          <td class="field-pg match">images</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">—</td>
+        </tr>
+      <tr class="pg-only">
+        <td class="field-mongo na">—</td>
+        <td class="field-pg new">type</td>
+        <td class="status-pg">🆕 Solo en PG</td>
+        <td class="desc">Tipo de operación</td>
+      </tr>
+      <tr class="pg-only">
+        <td class="field-mongo na">—</td>
+        <td class="field-pg new">active</td>
+        <td class="status-pg">🆕 Solo en PG</td>
+        <td class="desc">Activo/inactivo</td>
+      </tr></tbody>
+        </table>
+      </div>
+      <div class="collection-block">
+        <div class="collection-header">
+          <div class="header-left">
+            <span class="coll-label">MongoDB</span>
+            <span class="coll-name">happy-hours</span>
+            <span class="arrow">→</span>
+            <span class="coll-label pg">PostgreSQL</span>
+            <span class="coll-name pg">happy_hours</span>
+          </div>
+          <div class="header-right">
+            <span class="count">290 docs</span>
+            <span class="badge-missing">⚠️ 5 campos faltantes</span>
+          </div>
+        </div>
+        
+        
+        <table>
+          <thead>
+            <tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="field-mongo">_id</td>
+          <td class="field-pg match">mongo_id</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">ID único de MongoDB</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">companyId</td>
+          <td class="field-pg match">company_id</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">ID de la empresa (FK)</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">amountMin</td>
+          <td class="field-pg missing">amount_min</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">—</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">amountMax</td>
+          <td class="field-pg missing">amount_max</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">—</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">bonusAmount</td>
+          <td class="field-pg missing">bonus_amount</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">Monto del bono</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">isActive</td>
+          <td class="field-pg missing">is_active</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">—</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">type</td>
+          <td class="field-pg missing">type</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">Tipo de operación</td>
+        </tr>
+      <tr class="pg-only">
+        <td class="field-mongo na">—</td>
+        <td class="field-pg new">bonus</td>
+        <td class="status-pg">🆕 Solo en PG</td>
+        <td class="desc">Bono aplicado</td>
+      </tr>
+      <tr class="pg-only">
+        <td class="field-mongo na">—</td>
+        <td class="field-pg new">active</td>
+        <td class="status-pg">🆕 Solo en PG</td>
+        <td class="desc">Activo/inactivo</td>
+      </tr></tbody>
+        </table>
+      </div>
+      <div class="collection-block">
+        <div class="collection-header">
+          <div class="header-left">
+            <span class="coll-label">MongoDB</span>
+            <span class="coll-name">happy-hour-schedules</span>
+            <span class="arrow">→</span>
+            <span class="coll-label pg">PostgreSQL</span>
+            <span class="coll-name pg">happy_hour_schedules</span>
+          </div>
+          <div class="header-right">
+            <span class="count">87 docs</span>
+            <span class="badge-missing">⚠️ 9 campos faltantes</span>
+          </div>
+        </div>
+        
+        
+        <table>
+          <thead>
+            <tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="field-mongo">_id</td>
+          <td class="field-pg match">mongo_id</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">ID único de MongoDB</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">companyId</td>
+          <td class="field-pg missing">company_id</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">ID de la empresa (FK)</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">applyAllDays</td>
+          <td class="field-pg missing">apply_all_days</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">—</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">timezone</td>
+          <td class="field-pg match">timezone</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">Zona horaria</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">monday</td>
+          <td class="field-pg missing">monday</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">—</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">tuesday</td>
+          <td class="field-pg missing">tuesday</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">—</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">wednesday</td>
+          <td class="field-pg missing">wednesday</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">—</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">thursday</td>
+          <td class="field-pg missing">thursday</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">—</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">friday</td>
+          <td class="field-pg missing">friday</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">—</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">saturday</td>
+          <td class="field-pg missing">saturday</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">—</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">sunday</td>
+          <td class="field-pg missing">sunday</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">—</td>
+        </tr>
+      <tr class="pg-only">
+        <td class="field-mongo na">—</td>
+        <td class="field-pg new">happy_hour_id</td>
+        <td class="status-pg">🆕 Solo en PG</td>
+        <td class="desc">—</td>
+      </tr>
+      <tr class="pg-only">
+        <td class="field-mongo na">—</td>
+        <td class="field-pg new">schedules</td>
+        <td class="status-pg">🆕 Solo en PG</td>
+        <td class="desc">—</td>
+      </tr></tbody>
+        </table>
+      </div>
+      <div class="collection-block">
+        <div class="collection-header">
+          <div class="header-left">
+            <span class="coll-label">MongoDB</span>
+            <span class="coll-name">birthday-bonus</span>
+            <span class="arrow">→</span>
+            <span class="coll-label pg">PostgreSQL</span>
+            <span class="coll-name pg">birthday_bonuses</span>
+          </div>
+          <div class="header-right">
+            <span class="count">79 docs</span>
+            <span class="badge-missing">⚠️ 3 campos faltantes</span>
+          </div>
+        </div>
+        
+        
+        <table>
+          <thead>
+            <tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="field-mongo">_id</td>
+          <td class="field-pg match">mongo_id</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">ID único de MongoDB</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">minPurchaseAmount</td>
+          <td class="field-pg missing">min_purchase_amount</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">—</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">beforeDays</td>
+          <td class="field-pg missing">before_days</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">—</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">isActive</td>
+          <td class="field-pg missing">is_active</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">—</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">createdAt</td>
+          <td class="field-pg match">created_at</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">Fecha de creación</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">updatedAt</td>
+          <td class="field-pg match">updated_at</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">Última actualización</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">companyId</td>
+          <td class="field-pg match">company_id</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">ID de la empresa (FK)</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">bonusAmount</td>
+          <td class="field-pg match">bonus_amount</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">Monto del bono</td>
+        </tr>
+      <tr class="pg-only">
+        <td class="field-mongo na">—</td>
+        <td class="field-pg new">min_purchase</td>
+        <td class="status-pg">🆕 Solo en PG</td>
+        <td class="desc">Compra mínima</td>
+      </tr>
+      <tr class="pg-only">
+        <td class="field-mongo na">—</td>
+        <td class="field-pg new">days_before</td>
+        <td class="status-pg">🆕 Solo en PG</td>
+        <td class="desc">Días antes del cumpleaños</td>
+      </tr>
+      <tr class="pg-only">
+        <td class="field-mongo na">—</td>
+        <td class="field-pg new">active</td>
+        <td class="status-pg">🆕 Solo en PG</td>
+        <td class="desc">Activo/inactivo</td>
+      </tr></tbody>
+        </table>
+      </div>
+      <div class="collection-block">
+        <div class="collection-header">
+          <div class="header-left">
+            <span class="coll-label">MongoDB</span>
+            <span class="coll-name">referral-bonus</span>
+            <span class="arrow">→</span>
+            <span class="coll-label pg">PostgreSQL</span>
+            <span class="coll-name pg">referral_bonuses</span>
+          </div>
+          <div class="header-right">
+            <span class="count">3 docs</span>
+            <span class="badge-missing">⚠️ 2 campos faltantes</span>
+          </div>
+        </div>
+        
+        
+        <table>
+          <thead>
+            <tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="field-mongo">_id</td>
+          <td class="field-pg match">mongo_id</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">ID único de MongoDB</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">bonusAmount</td>
+          <td class="field-pg match">bonus_amount</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">Monto del bono</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">minPurchaseAmount</td>
+          <td class="field-pg missing">min_purchase_amount</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">—</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">isActive</td>
+          <td class="field-pg missing">is_active</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">—</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">createdAt</td>
+          <td class="field-pg match">created_at</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">Fecha de creación</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">updatedAt</td>
+          <td class="field-pg match">updated_at</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">Última actualización</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">companyId</td>
+          <td class="field-pg match">company_id</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">ID de la empresa (FK)</td>
+        </tr>
+      <tr class="pg-only">
+        <td class="field-mongo na">—</td>
+        <td class="field-pg new">active</td>
+        <td class="status-pg">🆕 Solo en PG</td>
+        <td class="desc">Activo/inactivo</td>
+      </tr></tbody>
+        </table>
+      </div>
+      <div class="collection-block">
+        <div class="collection-header">
+          <div class="header-left">
+            <span class="coll-label">MongoDB</span>
+            <span class="coll-name">daily-bonus</span>
+            <span class="arrow">→</span>
+            <span class="coll-label pg">PostgreSQL</span>
+            <span class="coll-name pg">daily_bonuses</span>
+          </div>
+          <div class="header-right">
+            <span class="count">58 docs</span>
+            <span class="badge-missing">⚠️ 4 campos faltantes</span>
+          </div>
+        </div>
+        
+        
+        <table>
+          <thead>
+            <tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="field-mongo">_id</td>
+          <td class="field-pg match">mongo_id</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">ID único de MongoDB</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">companyId</td>
+          <td class="field-pg match">company_id</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">ID de la empresa (FK)</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">amountMin</td>
+          <td class="field-pg missing">amount_min</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">—</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">amountMax</td>
+          <td class="field-pg missing">amount_max</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">—</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">bonusAmount</td>
+          <td class="field-pg missing">bonus_amount</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">Monto del bono</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">isActive</td>
+          <td class="field-pg missing">is_active</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">—</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">createdAt</td>
+          <td class="field-pg match">created_at</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">Fecha de creación</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">updatedAt</td>
+          <td class="field-pg match">updated_at</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">Última actualización</td>
+        </tr>
+      <tr class="pg-only">
+        <td class="field-mongo na">—</td>
+        <td class="field-pg new">min_amount</td>
+        <td class="status-pg">🆕 Solo en PG</td>
+        <td class="desc">Monto mínimo</td>
+      </tr>
+      <tr class="pg-only">
+        <td class="field-mongo na">—</td>
+        <td class="field-pg new">max_amount</td>
+        <td class="status-pg">🆕 Solo en PG</td>
+        <td class="desc">Monto máximo</td>
+      </tr>
+      <tr class="pg-only">
+        <td class="field-mongo na">—</td>
+        <td class="field-pg new">bonus</td>
+        <td class="status-pg">🆕 Solo en PG</td>
+        <td class="desc">Bono aplicado</td>
+      </tr>
+      <tr class="pg-only">
+        <td class="field-mongo na">—</td>
+        <td class="field-pg new">active</td>
+        <td class="status-pg">🆕 Solo en PG</td>
+        <td class="desc">Activo/inactivo</td>
+      </tr></tbody>
+        </table>
+      </div>
+      <div class="collection-block">
+        <div class="collection-header">
+          <div class="header-left">
+            <span class="coll-label">MongoDB</span>
+            <span class="coll-name">promo-match-prizes</span>
+            <span class="arrow">→</span>
+            <span class="coll-label pg">PostgreSQL</span>
+            <span class="coll-name pg">promo_match_prizes</span>
+          </div>
+          <div class="header-right">
+            <span class="count">88 docs</span>
+            <span class="badge-missing">⚠️ 2 campos faltantes</span>
+          </div>
+        </div>
+        
+        
+        <table>
+          <thead>
+            <tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="field-mongo">_id</td>
+          <td class="field-pg match">mongo_id</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">ID único de MongoDB</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">companyId</td>
+          <td class="field-pg match">company_id</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">ID de la empresa (FK)</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">maxPurchase</td>
+          <td class="field-pg match">max_purchase</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">Compra máxima</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">minPurchase</td>
+          <td class="field-pg match">min_purchase</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">Compra mínima</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">multiplier</td>
+          <td class="field-pg match">multiplier</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">—</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">createdAt</td>
+          <td class="field-pg match">created_at</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">Fecha de creación</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">updatedAt</td>
+          <td class="field-pg match">updated_at</td>
+          <td class="status-ok">✅ Migrado</td>
+          <td class="desc">Última actualización</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">isActive</td>
+          <td class="field-pg missing">is_active</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">—</td>
+        </tr>
+        <tr>
+          <td class="field-mongo">bonusAmount</td>
+          <td class="field-pg missing">bonus_amount</td>
+          <td class="status-missing">⚠️ Falta en PG</td>
+          <td class="desc">Monto del bono</td>
+        </tr>
+      <tr class="pg-only">
+        <td class="field-mongo na">—</td>
+        <td class="field-pg new">active</td>
+        <td class="status-pg">🆕 Solo en PG</td>
+        <td class="desc">Activo/inactivo</td>
+      </tr></tbody>
+        </table>
+      </div>
+  <p style="margin-top:32px;font-size:12px;color:#30363d;text-align:center">Generado el 11 de junio de 2026</p>
+</body>
+</html>

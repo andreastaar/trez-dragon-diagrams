@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8">
+<title>Trez v3 — Accounts & Ledger</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+body{font-family:-apple-system,sans-serif;background:#f8fafc;margin:0;padding:20px}
+h1{color:#1e3a5f;font-size:1.4rem;margin-bottom:4px}
+p{color:#64748b;font-size:.85rem;margin-top:0}
+.mermaid{background:white;border-radius:12px;padding:24px;box-shadow:0 1px 6px rgba(0,0,0,.08)}
+.badge{display:inline-block;background:#1e3a5f;color:white;border-radius:6px;padding:2px 10px;font-size:.75rem;margin-left:8px;vertical-align:middle}
+</style></head><body>
+<h1>🐉 DRAGON 2.0 — Accounts & Ledger <span class="badge">PostgreSQL v3</span></h1>
+<p>Schema Trez Platform · Migración MongoDB → PostgreSQL · ER_04_accounts</p>
+<div class="mermaid">
+erDiagram
+    customer_accounts {
+        uuid id PK
+        varchar mongo_id FK
+        uuid customer_id FK
+        uuid company_id FK
+        varchar currency
+        numeric balance
+        numeric reserved_balance
+        numeric amount_in_platform
+        numeric amount_in_games
+        numeric amount_in_sportbook
+        account_status status
+        integer version
+        timestamptz created_at
+        timestamptz updated_at
+    }
+    account_ledger_entries {
+        uuid id PK
+        varchar mongo_id FK
+        uuid account_id FK
+        ledger_type type
+        ledger_direction direction
+        numeric amount
+        numeric balance_before
+        numeric balance_after
+        numeric reserved_before
+        numeric reserved_after
+        text reference_type
+        text reference_id FK
+        text idempotency_key
+        jsonb metadata
+        text created_by
+        timestamptz created_at
+    }
+    customer_accounts ||--o{ account_ledger_entries : "account_id"
+</div>
+<script>mermaid.initialize({startOnLoad:true,theme:'default',er:{diagramPadding:30}});</script>
+</body></html>
