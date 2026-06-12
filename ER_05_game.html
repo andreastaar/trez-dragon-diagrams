@@ -158,10 +158,26 @@ erDiagram
         timestamptz created_at
         timestamptz updated_at
     }
+    credential_audit_log {
+        uuid id PK
+        varchar mongo_id
+        credential_operation operation
+        credential_entity_type entity_type
+        uuid entity_id FK
+        uuid company_id FK
+        uuid user_id FK
+        text user_role
+        jsonb before_data
+        jsonb after_data
+        jsonb metadata
+        timestamptz created_at
+    }
     game_catalog ||--o{ game_companies : "game_id"
     game_companies ||--o{ game_clients : "game_company_id"
     game_companies ||--o{ operation_strategy_maps : "game_company_id"
     game_catalog ||--o{ game_admin_accounts : "game_id"
+    game_admin_credentials ||--o{ credential_audit_log : "entity_id"
+    game_admin_accounts ||--o{ credential_audit_log : "entity_id"
 </div>
 <script>mermaid.initialize({startOnLoad:true,theme:'default',er:{diagramPadding:30}});</script>
 </body></html>

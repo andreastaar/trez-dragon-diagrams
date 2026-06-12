@@ -517,6 +517,32 @@
       </tr></tbody>
         </table>
       </div>
-  <p style="margin-top:32px;font-size:12px;color:#30363d;text-align:center">Generado el 11 de junio de 2026</p>
+  <h2 style="color:#a371f7;font-size:15px;font-weight:600;margin:36px 0 16px;border-top:1px solid #30363d;padding-top:24px">🆕 Tablas nuevas v3.1 — sin equivalente en MongoDB</h2>
+
+  <div class="collection-block new-table-block">
+    <div class="collection-header new-table-header">
+      <div class="header-left">
+        <span class="coll-label" style="color:#a371f7;background:#1a1040">PostgreSQL ONLY</span>
+        <span class="coll-name pg">credential_audit_log</span>
+      </div>
+      <div class="header-right"><span class="badge-new">🆕 Sin equivalente en MongoDB</span></div>
+    </div>
+    <div class="coll-desc">Registro inmutable de auditoría sobre credenciales y cuentas de juego (RF-008). Ningún rol puede modificar ni eliminar sus registros.<span class="service-tag new-svc">→ game-service</span></div>
+    <table><thead><tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr></thead><tbody>
+      <tr><td class="field-mongo na">—</td><td class="field-pg new">id</td><td class="status-pg">🆕 Nuevo</td><td class="desc">UUID PK</td></tr>
+      <tr><td class="field-mongo">operation</td><td class="field-pg new">operation</td><td class="status-pg">🆕 Nuevo</td><td class="desc">CREATE | UPDATE | DELETE | STATUS_CHANGE</td></tr>
+      <tr><td class="field-mongo">entityType</td><td class="field-pg new">entity_type</td><td class="status-pg">🆕 Nuevo</td><td class="desc">GameAdminCredential | GameAdminAccount</td></tr>
+      <tr><td class="field-mongo">entityId</td><td class="field-pg new">entity_id</td><td class="status-pg">🆕 Nuevo</td><td class="desc">UUID del objeto auditado</td></tr>
+      <tr><td class="field-mongo">companyId</td><td class="field-pg new">company_id</td><td class="status-pg">🆕 Nuevo</td><td class="desc">UUID FK → companies</td></tr>
+      <tr><td class="field-mongo">userId</td><td class="field-pg new">user_id</td><td class="status-pg">🆕 Nuevo</td><td class="desc">UUID del usuario (nullable)</td></tr>
+      <tr><td class="field-mongo">userRole</td><td class="field-pg new">user_role</td><td class="status-pg">🆕 Nuevo</td><td class="desc">Rol al momento de la operación</td></tr>
+      <tr><td class="field-mongo">before</td><td class="field-pg new">before_data</td><td class="status-pg">🆕 Nuevo</td><td class="desc">JSONB — estado antes del cambio</td></tr>
+      <tr><td class="field-mongo">after</td><td class="field-pg new">after_data</td><td class="status-pg">🆕 Nuevo</td><td class="desc">JSONB — estado después del cambio</td></tr>
+      <tr><td class="field-mongo">metadata</td><td class="field-pg new">metadata</td><td class="status-pg">🆕 Nuevo</td><td class="desc">JSONB — contexto adicional</td></tr>
+      <tr><td class="field-mongo na">—</td><td class="field-pg new">created_at</td><td class="status-pg">🆕 Nuevo</td><td class="desc">TIMESTAMPTZ — solo inserción</td></tr>
+    </tbody></table>
+  </div>
+
+  <p style="margin-top:32px;font-size:12px;color:#30363d;text-align:center">Actualizado el 12 de junio de 2026 (v3.1)</p>
 </body>
 </html>

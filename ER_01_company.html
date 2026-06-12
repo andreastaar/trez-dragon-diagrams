@@ -75,9 +75,21 @@ erDiagram
         timestamptz created_at
         timestamptz updated_at
     }
+    licenses {
+        uuid id PK
+        varchar mongo_id
+        uuid company_id FK
+        license_type type
+        license_status status
+        timestamptz starts_at
+        timestamptz expires_at
+        timestamptz created_at
+        timestamptz updated_at
+    }
     companies ||--o{ apps_versions : "company_id"
     companies ||--o{ hierarchies : "company_id"
     companies ||--o{ cashout_rules : "company_id"
+    companies ||--o{ licenses : "company_id"
 </div>
 <script>mermaid.initialize({startOnLoad:true,theme:'default',er:{diagramPadding:30}});</script>
 </body></html>

@@ -110,11 +110,34 @@ erDiagram
         jsonb metadata
         timestamptz created_at
     }
+    notification_group_types {
+        uuid id PK
+        varchar mongo_id
+        text name
+        text description
+        timestamptz created_at
+        timestamptz updated_at
+    }
+    notification_groups {
+        uuid id PK
+        varchar mongo_id
+        text title
+        uuid type_id FK
+        timestamptz created_at
+        timestamptz updated_at
+    }
+    notification_group_members {
+        uuid group_id FK
+        uuid notification_id FK
+    }
     staff_role ||--o{ staff_role_permission : "role_id"
     staff_permission ||--o{ staff_role_permission : "permission_code"
     staff_user ||--o{ staff_company_assignment : "staff_user_id"
     staff_role ||--o{ staff_company_assignment : "role_id"
     staff ||--o{ staff_companies : "staff_id"
+    notification_group_types ||--o{ notification_groups : "type_id"
+    notification_groups ||--o{ notification_group_members : "group_id"
+    notifications ||--o{ notification_group_members : "notification_id"
 </div>
 <script>mermaid.initialize({startOnLoad:true,theme:'default',er:{diagramPadding:30}});</script>
 </body></html>

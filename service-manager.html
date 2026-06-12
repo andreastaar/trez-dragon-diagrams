@@ -1233,5 +1233,40 @@
       </tbody>
     </table>
   </div>
+
+  <div class="collection-block new-table-block">
+    <div class="collection-header new-table-header">
+      <div class="header-left">
+        <span class="coll-label" style="color:#a371f7;background:#1a1040">PostgreSQL ONLY</span>
+        <span class="coll-name pg">notification_group_types</span>
+      </div>
+      <div class="header-right"><span class="badge-new">🆕 Sin equivalente en MongoDB</span></div>
+    </div>
+    <div class="coll-desc">Tipos de grupos de notificación (categorías). En MongoDB era un campo de texto en notification-group-type collection.<span class="service-tag new-svc">→ manager-service</span></div>
+    <table><thead><tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr></thead><tbody>
+      <tr><td class="field-mongo na">—</td><td class="field-pg new">id</td><td class="status-pg">🆕 Nuevo</td><td class="desc">UUID PK</td></tr>
+      <tr><td class="field-mongo">name</td><td class="field-pg new">name</td><td class="status-pg">🆕 Nuevo</td><td class="desc">Nombre del tipo de grupo</td></tr>
+      <tr><td class="field-mongo">description</td><td class="field-pg new">description</td><td class="status-pg">🆕 Nuevo</td><td class="desc">Descripción opcional</td></tr>
+    </tbody></table>
+  </div>
+
+  <div class="collection-block new-table-block">
+    <div class="collection-header new-table-header">
+      <div class="header-left">
+        <span class="coll-label" style="color:#a371f7;background:#1a1040">PostgreSQL ONLY</span>
+        <span class="coll-name pg">notification_groups + notification_group_members</span>
+      </div>
+      <div class="header-right"><span class="badge-new">🆕 Sin equivalente en MongoDB</span></div>
+    </div>
+    <div class="coll-desc">Grupos de notificaciones con FK al tipo. notification_group_members es la tabla join grupo ↔ notificación (en Mongo era array embebido).<span class="service-tag new-svc">→ manager-service</span></div>
+    <table><thead><tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr></thead><tbody>
+      <tr><td class="field-mongo na">—</td><td class="field-pg new">id</td><td class="status-pg">🆕 Nuevo</td><td class="desc">UUID PK</td></tr>
+      <tr><td class="field-mongo">title</td><td class="field-pg new">title</td><td class="status-pg">🆕 Nuevo</td><td class="desc">Título del grupo</td></tr>
+      <tr><td class="field-mongo">type (ObjectId ref)</td><td class="field-pg new">type_id</td><td class="status-pg">🆕 Nuevo</td><td class="desc">UUID FK → notification_group_types</td></tr>
+      <tr><td class="field-mongo">notifications[] (array)</td><td class="field-pg new">notification_group_members</td><td class="status-pg">🆕 Nuevo</td><td class="desc">Tabla join: group_id + notification_id</td></tr>
+    </tbody></table>
+  </div>
+
+  <p style="margin-top:32px;font-size:12px;color:#30363d;text-align:center">Actualizado el 12 de junio de 2026 (v3.1)</p>
 </body>
 </html>

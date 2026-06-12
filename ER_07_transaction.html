@@ -67,6 +67,40 @@ erDiagram
         text idempotency_id FK
         boolean bot_failed
     }
+    gateway_references {
+        uuid id PK
+        varchar mongo_id
+        text provider
+        uuid company_id FK
+        uuid customer_id FK
+        uuid transaction_id FK
+        uuid payment_method_id FK
+        numeric amount
+        numeric fee_platform
+        numeric fee_provider
+        numeric rollover
+        numeric brand_amount_received
+        boolean charged
+        text third_party_status
+        text third_party_transaction_id
+        boolean is_company_paying_platform_fee
+        boolean is_company_paying_dragon_fee
+        boolean is_company_paying_provider_fee
+        jsonb payload
+    }
+    suggests {
+        uuid id PK
+        varchar mongo_id
+        uuid company_id FK
+        text name
+        text description
+        text type
+    }
+    transactions ||--o{ gateway_references : "referencia"
+    customers ||--o{ gateway_references : "cliente"
+    payment_methods ||--o{ gateway_references : "metodo"
+    companies ||--o{ gateway_references : "empresa"
+    companies ||--o{ suggests : "empresa"
 </div>
 <script>mermaid.initialize({startOnLoad:true,theme:'default',er:{diagramPadding:30}});</script>
 </body></html>

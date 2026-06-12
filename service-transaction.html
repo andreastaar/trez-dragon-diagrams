@@ -1129,6 +1129,55 @@
       </tr></tbody>
         </table>
       </div>
-  <p style="margin-top:32px;font-size:12px;color:#30363d;text-align:center">Generado el 11 de junio de 2026</p>
+  <h2 style="color:#a371f7;font-size:15px;font-weight:600;margin:36px 0 16px;border-top:1px solid #30363d;padding-top:24px">🆕 Tablas nuevas v3.1 — sin equivalente en MongoDB</h2>
+
+  <div class="collection-block new-table-block">
+    <div class="collection-header new-table-header">
+      <div class="header-left">
+        <span class="coll-label" style="color:#a371f7;background:#1a1040">PostgreSQL ONLY</span>
+        <span class="coll-name pg">gateway_references</span>
+      </div>
+      <div class="header-right"><span class="badge-new">🆕 Sin equivalente en MongoDB</span></div>
+    </div>
+    <div class="coll-desc">Tabla unificada que consolida las 10 colecciones de referencias de gateway (apex, kumeo, now_payments, scifi, qadirah, soap, taparcadia, tierlock, whop, wia). Contiene el revenue/fee data único de cada transacción con pasarela externa.<span class="service-tag new-svc">→ transaction-service</span></div>
+    <table><thead><tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr></thead><tbody>
+      <tr><td class="field-mongo na">—</td><td class="field-pg new">id</td><td class="status-pg">🆕 Nuevo</td><td class="desc">UUID PK</td></tr>
+      <tr><td class="field-mongo na">—</td><td class="field-pg new">provider</td><td class="status-pg">🆕 Nuevo</td><td class="desc">Gateway: 'tierlock' | 'kumeo' | 'apex' | 'whop' | 'wia' | etc.</td></tr>
+      <tr><td class="field-mongo">companyId</td><td class="field-pg new">company_id</td><td class="status-pg">🆕 Nuevo</td><td class="desc">UUID FK → companies</td></tr>
+      <tr><td class="field-mongo">customerId</td><td class="field-pg new">customer_id</td><td class="status-pg">🆕 Nuevo</td><td class="desc">UUID FK → customers</td></tr>
+      <tr><td class="field-mongo na">—</td><td class="field-pg new">transaction_id</td><td class="status-pg">🆕 Nuevo</td><td class="desc">UUID FK → transactions (nullable)</td></tr>
+      <tr><td class="field-mongo">paymentMethodId</td><td class="field-pg new">payment_method_id</td><td class="status-pg">🆕 Nuevo</td><td class="desc">UUID FK → payment_methods</td></tr>
+      <tr><td class="field-mongo">amount</td><td class="field-pg new">amount</td><td class="status-pg">🆕 Nuevo</td><td class="desc">Monto de la transacción</td></tr>
+      <tr><td class="field-mongo">feeDovera / feeDragon</td><td class="field-pg new">fee_platform</td><td class="status-pg">🆕 Nuevo</td><td class="desc">Fee de la plataforma Trez</td></tr>
+      <tr><td class="field-mongo">feeProvider</td><td class="field-pg new">fee_provider</td><td class="status-pg">🆕 Nuevo</td><td class="desc">Fee cobrado por el gateway</td></tr>
+      <tr><td class="field-mongo">brandAmountReceived</td><td class="field-pg new">brand_amount_received</td><td class="status-pg">🆕 Nuevo</td><td class="desc">Monto neto recibido por la marca</td></tr>
+      <tr><td class="field-mongo">charged</td><td class="field-pg new">charged</td><td class="status-pg">🆕 Nuevo</td><td class="desc">BOOLEAN — si el pago fue efectivo en el gateway</td></tr>
+      <tr><td class="field-mongo">thirdPartyStatus</td><td class="field-pg new">third_party_status</td><td class="status-pg">🆕 Nuevo</td><td class="desc">Estado reportado por el gateway externo</td></tr>
+      <tr><td class="field-mongo">thirdPartyTransactionId</td><td class="field-pg new">third_party_transaction_id</td><td class="status-pg">🆕 Nuevo</td><td class="desc">ID de la transacción en el gateway</td></tr>
+      <tr><td class="field-mongo">isCompanyPayingDoveraFee / DragonFee / ProviderFee</td><td class="field-pg new">is_company_paying_*_fee</td><td class="status-pg">🆕 Nuevo</td><td class="desc">Flags de quién absorbe cada fee</td></tr>
+      <tr><td class="field-mongo">fbc / fbp / ipAddress / userAgent</td><td class="field-pg new">fbc / fbp / ip_address / user_agent</td><td class="status-pg">🆕 Nuevo</td><td class="desc">Tracking Meta Pixel e info del cliente</td></tr>
+      <tr><td class="field-mongo">* (campos específicos)</td><td class="field-pg new">payload</td><td class="status-pg">🆕 Nuevo</td><td class="desc">JSONB — campos exclusivos de cada gateway</td></tr>
+    </tbody></table>
+  </div>
+
+  <div class="collection-block new-table-block">
+    <div class="collection-header new-table-header">
+      <div class="header-left">
+        <span class="coll-label" style="color:#a371f7;background:#1a1040">PostgreSQL ONLY</span>
+        <span class="coll-name pg">suggests</span>
+      </div>
+      <div class="header-right"><span class="badge-new">🆕 Sin equivalente directo</span></div>
+    </div>
+    <div class="coll-desc">Sugerencias de métodos de pago o procesos de transacción configuradas por compañía.<span class="service-tag new-svc">→ transaction-service</span></div>
+    <table><thead><tr><th>Campo MongoDB</th><th>Campo PostgreSQL</th><th>Estado</th><th>Para qué sirve</th></tr></thead><tbody>
+      <tr><td class="field-mongo na">—</td><td class="field-pg new">id</td><td class="status-pg">🆕 Nuevo</td><td class="desc">UUID PK</td></tr>
+      <tr><td class="field-mongo">companyId</td><td class="field-pg new">company_id</td><td class="status-pg">🆕 Nuevo</td><td class="desc">UUID FK → companies</td></tr>
+      <tr><td class="field-mongo">name</td><td class="field-pg new">name</td><td class="status-pg">🆕 Nuevo</td><td class="desc">Nombre de la sugerencia</td></tr>
+      <tr><td class="field-mongo">description</td><td class="field-pg new">description</td><td class="status-pg">🆕 Nuevo</td><td class="desc">Descripción</td></tr>
+      <tr><td class="field-mongo">type</td><td class="field-pg new">type</td><td class="status-pg">🆕 Nuevo</td><td class="desc">suggest_type: 'payment-method' | 'proccess-transaction'</td></tr>
+    </tbody></table>
+  </div>
+
+  <p style="margin-top:32px;font-size:12px;color:#30363d;text-align:center">Actualizado el 12 de junio de 2026 (v3.1)</p>
 </body>
 </html>
