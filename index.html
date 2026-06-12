@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Schema Comparison — Trez</title>
+<title>DRAGON 2.0 — Diagramas & Schema · Trez</title>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0d1117;color:#c9d1d9;padding:40px;max-width:860px;margin:0 auto}
@@ -11,9 +11,14 @@
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
   .card{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:18px;text-decoration:none;color:inherit;display:block;transition:border-color .15s}
   .card:hover{border-color:#58a6ff}
+  .card.er-card:hover{border-color:#a371f7}
   .card h2{font-size:14px;color:#ffa657;margin-bottom:6px;font-family:'SF Mono',Monaco,monospace}
+  .card.er-card h2{color:#a371f7}
   .card p{font-size:12px;color:#6e7681;line-height:1.5}
   .tag{display:inline-block;font-size:11px;background:#0d2d6e;color:#58a6ff;padding:2px 8px;border-radius:20px;margin-top:10px}
+  .tag.er{background:#1a1040;color:#a371f7}
+  .section-title{font-size:16px;font-weight:600;color:#e6edf3;margin:36px 0 6px;padding-bottom:8px;border-bottom:1px solid #30363d}
+  .section-sub{font-size:12px;color:#6e7681;margin-bottom:16px}
 
   .coll-desc{font-size:12px;color:#8b949e;padding:8px 16px 10px;border-bottom:1px solid #21262d;background:#0d1117;line-height:1.5}
   .service-tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:4px;margin-left:8px;font-weight:500}
@@ -25,10 +30,63 @@
   </style>
 </head>
 <body>
-  <h1>🗺️ Schema Comparison — Trez Platform</h1>
-  <p>MongoDB vs PostgreSQL · Migration Analysis · 11 de junio de 2026</p>
+  <h1>🐉 DRAGON 2.0 — Diagramas & Schema</h1>
+  <p>Trez Platform · Migración MongoDB → PostgreSQL · PostgreSQL v3 (57 tablas)</p>
+
+  <div class="section-title">🗂️ ER Diagrams — PostgreSQL v3 (Mermaid.js interactivo)</div>
+  <div class="section-sub">Diagramas de entidad-relación por dominio. Abrir en browser para ver relaciones entre tablas.</div>
   <div class="grid">
-    
+    <a class="card er-card" href="ER_01_company.html">
+      <h2>ER_01 — Company & Hierarchies</h2>
+      <p>companies, hierarchies, appsversions, staffcompanies</p>
+      <span class="tag er">Ver diagrama →</span>
+    </a>
+    <a class="card er-card" href="ER_02_identity_staff.html">
+      <h2>ER_02 — Identity & Staff (RBAC)</h2>
+      <p>identity_account, staff_user, staff_role, staff_permission, staff_company_assignment</p>
+      <span class="tag er">Ver diagrama →</span>
+    </a>
+    <a class="card er-card" href="ER_03_customer.html">
+      <h2>ER_03 — Customer</h2>
+      <p>customers, customer_tags, blacklists, spams, customer_data_changelog</p>
+      <span class="tag er">Ver diagrama →</span>
+    </a>
+    <a class="card er-card" href="ER_04_accounts.html">
+      <h2>ER_04 — Accounts & Ledger</h2>
+      <p>customer_accounts, account_ledger_entries, movements, transfer_platforms, cashout_rules</p>
+      <span class="tag er">Ver diagrama →</span>
+    </a>
+    <a class="card er-card" href="ER_05_game.html">
+      <h2>ER_05 — Game</h2>
+      <p>game_catalog, game_companies, game_clients, mechanics, rollovers, sport_book_transactions</p>
+      <span class="tag er">Ver diagrama →</span>
+    </a>
+    <a class="card er-card" href="ER_06_payment.html">
+      <h2>ER_06 — Payment</h2>
+      <p>gateways, payment_providers, payment_methods, provider_payment_methods, purchase_cash_tags</p>
+      <span class="tag er">Ver diagrama →</span>
+    </a>
+    <a class="card er-card" href="ER_07_transaction.html">
+      <h2>ER_07 — Transaction & Movements</h2>
+      <p>transactions, sport_book_transactions, transfer_platforms</p>
+      <span class="tag er">Ver diagrama →</span>
+    </a>
+    <a class="card er-card" href="ER_08_reward.html">
+      <h2>ER_08 — Reward & Prizes</h2>
+      <p>prizes, draws, draw_winners, prize_roulettes, roulette_winners, stores, products</p>
+      <span class="tag er">Ver diagrama →</span>
+    </a>
+    <a class="card er-card" href="ER_09_promotion.html">
+      <h2>ER_09 — Promohub</h2>
+      <p>happy_hours, happy_hour_schedules, promotional_banners, referral_bonuses, promo_matches</p>
+      <span class="tag er">Ver diagrama →</span>
+    </a>
+  </div>
+
+  <div class="section-title">🗺️ Schema Comparison — MongoDB vs PostgreSQL</div>
+  <div class="section-sub">Comparación campo a campo por servicio. Incluye columna "Para qué sirve" y bloques 🆕 para tablas nuevas.</div>
+  <div class="grid">
+
     <a class="card" href="service-manager.html">
       <h2>service-manager</h2>
       <p>companies, managers, agents, mastermanagers...</p>
