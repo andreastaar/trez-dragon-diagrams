@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>ETL Guide — DRAGON 2.0 · Trez</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0d1117;color:#c9d1d9;padding:40px;max-width:1000px;margin:0 auto}
+  h1{font-size:26px;color:#58a6ff;margin-bottom:6px}
+  .subtitle{color:#6e7681;margin-bottom:36px;font-size:14px}
+  a.back{color:#58a6ff;font-size:13px;text-decoration:none;display:inline-block;margin-bottom:28px}
+  a.back:hover{text-decoration:underline}
+
+  h2{font-size:18px;color:#e6edf3;margin:36px 0 12px;padding-bottom:8px;border-bottom:2px solid #30363d}
+  h3{font-size:14px;color:#a371f7;margin:20px 0 8px;font-family:'SF Mono',Monaco,monospace}
+  p{font-size:13px;color:#8b949e;line-height:1.6;margin-bottom:10px}
+
+  table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:20px}
+  thead th{background:#161b22;color:#e6edf3;padding:10px 14px;text-align:left;border:1px solid #30363d;font-size:12px;font-family:'SF Mono',Monaco,monospace}
+  tbody td{padding:9px 14px;border:1px solid #21262d;color:#c9d1d9;vertical-align:top}
+  tbody tr:nth-child(even) td{background:#0d1117}
+  tbody tr:nth-child(odd) td{background:#161b22}
+  td code,th code{font-family:'SF Mono',Monaco,monospace;font-size:12px;color:#79c0ff}
+  td .arrow{color:#6e7681;margin:0 4px}
+  td .pg{color:#3fb950}
+  td .mongo{color:#ffa657}
+  td .note{color:#6e7681;font-size:11px;display:block;margin-top:3px}
+
+  .tier{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600;margin-right:6px;font-family:'SF Mono',Monaco,monospace}
+  .t0{background:#0d2d1a;color:#3fb950}
+  .t1{background:#0d2d6e;color:#58a6ff}
+  .t2{background:#1a1040;color:#a371f7}
+  .t3{background:#2d1a0d;color:#ffa657}
+  .t4{background:#2d0d0d;color:#f85149}
+
+  .tier-block{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:16px 20px;margin-bottom:12px}
+  .tier-block h4{font-size:13px;color:#e6edf3;margin-bottom:8px}
+  .tier-block ul{list-style:none;padding:0}
+  .tier-block ul li{font-size:12px;color:#8b949e;padding:2px 0;font-family:'SF Mono',Monaco,monospace}
+  .tier-block ul li::before{content:"→ ";color:#30363d}
+
+  .enum-old{color:#ffa657;font-family:'SF Mono',Monaco,monospace;font-size:12px}
+  .enum-new{color:#3fb950;font-family:'SF Mono',Monaco,monospace;font-size:12px}
+  .enum-same{color:#58a6ff;font-family:'SF Mono',Monaco,monospace;font-size:12px}
+  .tag-same{display:inline-block;font-size:10px;background:#0d2d6e;color:#58a6ff;padding:1px 6px;border-radius:4px;margin-left:4px}
+  .tag-map{display:inline-block;font-size:10px;background:#2d1a0d;color:#ffa657;padding:1px 6px;border-radius:4px;margin-left:4px}
+  .tag-drop{display:inline-block;font-size:10px;background:#2d0d0d;color:#f85149;padding:1px 6px;border-radius:4px;margin-left:4px}
+
+  .callout{background:#161b22;border-left:3px solid #58a6ff;padding:12px 16px;border-radius:0 6px 6px 0;margin-bottom:16px;font-size:13px;color:#8b949e;line-height:1.6}
+  .callout.warn{border-left-color:#ffa657}
+  .callout code{font-family:'SF Mono',Monaco,monospace;color:#79c0ff;font-size:12px}
+</style>
+</head>
+<body>
+
+<a class="back" href="index.html">← Volver al índice</a>
+<h1>🔄 ETL Guide — DRAGON 2.0</h1>
+<p class="subtitle">Guía de transformación para el ETL MongoDB → PostgreSQL · Trez Platform</p>
+
+<!-- =============================================
+     SECCIÓN 1 — ObjectId → UUID
+     ============================================= -->
+<h2>1. Conversión de IDs: ObjectId → UUID</h2>
+
+<div class="callout">
+  Cada documento MongoDB tiene un <code>_id</code> de tipo ObjectId (24 hex chars). En PostgreSQL usamos <code>UUID</code> generados con <code>gen_random_uuid()</code>. El ObjectId original se guarda en la columna <code>mongo_id VARCHAR(24)</code> presente en cada tabla para trazabilidad y rollback.
+</div>
+
+<h3>Estrategia general</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Paso</th>
+      <th>Descripción</th>
+      <th>Ejemplo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1. Leer</td>
+      <td>Extraer doc de MongoDB con su <code>_id</code></td>
+      <td><code class="mongo">{ "_id": "64b3c1a...", "email": "..." }</code></td>
+    </tr>
+    <tr>
+      <td>2. Generar UUID</td>
+      <td>Crear un UUID nuevo en PostgreSQL vía <code>gen_random_uuid()</code></td>
+      <td><code class="pg">id = 'f47ac10b-58cc-4372-a567-0e02b2c3d479'</code></td>
+    </tr>
+    <tr>
+      <td>3. Guardar mapping</td>
+      <td>Insertar en tabla temporal <code>id_mapping</code> para resolver FKs</td>
+      <td><code>id_mapping(mongo_id, pg_uuid, table_name)</code></td>
+    </tr>
+    <tr>
+      <td>4. Resolver FKs</td>
+      <td>En tablas hijas, hacer JOIN con <code>id_mapping</code> para obtener el UUID correcto</td>
+      <td><code>customer_id = (SELECT pg_uuid FROM id_mapping WHERE mongo_id = doc.customerId)</code></td>
+    </tr>
+    <tr>
+      <td>5. Guardar <code>mongo_id</code></td>
+      <td>Persistir el ObjectId original en la columna <code>mongo_id</code> de cada fila</td>
+      <td><code>mongo_id = '64b3c1a...'</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Tabla auxiliar para el ETL (crear antes de migrar)</h3>
+<table>
+  <thead>
+    <tr><th>DDL</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>CREATE TABLE _etl_id_mapping (<br>
+        &nbsp;&nbsp;mongo_id    VARCHAR(24)  NOT NULL,<br>
+        &nbsp;&nbsp;pg_uuid     UUID         NOT NULL,<br>
+        &nbsp;&nbsp;table_name  VARCHAR(60)  NOT NULL,<br>
+        &nbsp;&nbsp;migrated_at TIMESTAMPTZ  DEFAULT now(),<br>
+        &nbsp;&nbsp;PRIMARY KEY (mongo_id, table_name)<br>
+        );</code>
+        <span class="note">Tabla temporal — borrar después de validar la migración</span>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- =============================================
+     SECCIÓN 2 — Campos embebidos
+     ============================================= -->
+<h2>2. Campos Embebidos → Tablas Separadas</h2>
+
+<div class="callout warn">
+  En MongoDB varios campos viven embebidos dentro de un documento. En PostgreSQL esos datos se normalizan en tablas separadas. El ETL debe extraerlos explícitamente.
+</div>
+
+<h3>2.1 — Balance de wallet (service-customer → customer_accounts)</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Campo MongoDB (customers)</th>
+      <th>Tabla PG destino</th>
+      <th>Columna PG</th>
+      <th>Notas</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="mongo">amountInPlatform</code></td>
+      <td><code class="pg">customer_accounts</code></td>
+      <td><code class="pg">balance</code></td>
+      <td><span class="note">Una fila por (customer_id, company_id, currency). Obtener también de wallet-service.customer-account si existe.</span></td>
+    </tr>
+    <tr>
+      <td><code class="mongo">amountInGames</code></td>
+      <td><code class="pg">customer_accounts</code></td>
+      <td><code class="pg">amount_in_games</code></td>
+      <td><span class="note">Columna a agregar si no existe en v3.1</span></td>
+    </tr>
+    <tr>
+      <td><code class="mongo">amountInSportBook</code></td>
+      <td><code class="pg">customer_accounts</code></td>
+      <td><code class="pg">amount_in_sport_book</code></td>
+      <td><span class="note">Columna a agregar si no existe en v3.1</span></td>
+    </tr>
+    <tr>
+      <td><code class="mongo">reservedBalance</code> (wallet-service)</td>
+      <td><code class="pg">customer_accounts</code></td>
+      <td><code class="pg">reserved_balance</code></td>
+      <td><span class="note">Fuente autoritativa: wallet-service, no service-customer</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>2.2 — Staff asignado a empresas (managers/agents → staff_company_assignment)</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Campo MongoDB</th>
+      <th>Tabla PG destino</th>
+      <th>Columna PG</th>
+      <th>Notas</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="mongo">staffCompanies[]</code> (managers)</td>
+      <td><code class="pg">staff_company_assignment</code></td>
+      <td><code class="pg">staff_id, company_id</code></td>
+      <td><span class="note">Array embebido — generar una fila por elemento del array</span></td>
+    </tr>
+    <tr>
+      <td><code class="mongo">staffCompanies[]</code> (agents)</td>
+      <td><code class="pg">staff_company_assignment</code></td>
+      <td><code class="pg">staff_id, company_id</code></td>
+      <td><span class="note">Mismo target, mismo proceso</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>2.3 — Roles y permisos (staff_role → staff_role_permission)</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Campo MongoDB</th>
+      <th>Tabla PG destino</th>
+      <th>Columna PG</th>
+      <th>Notas</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="mongo">permissions[]</code> (roles)</td>
+      <td><code class="pg">staff_role_permission</code></td>
+      <td><code class="pg">role_id, permission_id</code></td>
+      <td><span class="note">Array de strings → tabla join. Crear staff_permission primero con los valores únicos.</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>2.4 — Notificaciones (notification_groups → notification_group_members)</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Campo MongoDB</th>
+      <th>Tabla PG destino</th>
+      <th>Columna PG</th>
+      <th>Notas</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="mongo">notifications[]</code> (notificationGroups)</td>
+      <td><code class="pg">notification_group_members</code></td>
+      <td><code class="pg">group_id, customer_id</code></td>
+      <td><span class="note">Array de customerIds embebidos → tabla join con FK a customers</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>2.5 — Licencias (companies → licenses)</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Campo MongoDB</th>
+      <th>Tabla PG destino</th>
+      <th>Columna PG</th>
+      <th>Notas</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="mongo">license.type</code> (companies)</td>
+      <td><code class="pg">licenses</code></td>
+      <td><code class="pg">license_type, company_id</code></td>
+      <td><span class="note">Si el campo existe embebido en company-service/companies</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>2.6 — Gateway reference data (service-transaction → gateway_references)</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Colección MongoDB (payment-gateways/)</th>
+      <th>Tabla PG destino</th>
+      <th>Notas</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="mongo">apex-references</code></td>
+      <td><code class="pg">gateway_references</code></td>
+      <td><span class="note">Contiene revenue/fee data crítico. <strong>No borrar de Mongo hasta validar.</strong></span></td>
+    </tr>
+    <tr>
+      <td><code class="mongo">kumeo-references</code>, <code class="mongo">kumeo-payment-references</code></td>
+      <td><code class="pg">gateway_references</code></td>
+      <td><span class="note">charged:true = ingresos reales</span></td>
+    </tr>
+    <tr>
+      <td><code class="mongo">now-payments-references</code></td>
+      <td><code class="pg">gateway_references</code></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code class="mongo">whop-references</code>, <code class="mongo">whop-payment-references</code></td>
+      <td><code class="pg">gateway_references</code></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code class="mongo">scifi-references</code>, <code class="mongo">qadirah-references</code></td>
+      <td><code class="pg">gateway_references</code></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code class="mongo">soap-references</code>, <code class="mongo">taparcadia-references</code></td>
+      <td><code class="pg">gateway_references</code></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code class="mongo">tierlock-references</code>, <code class="mongo">wia-references</code></td>
+      <td><code class="pg">gateway_references</code></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- =============================================
+     SECCIÓN 3 — Orden de carga (FK load order)
+     ============================================= -->
+<h2>3. Orden de Carga (FK Load Order)</h2>
+
+<div class="callout">
+  Las tablas deben cargarse en el orden correcto para respetar las foreign keys. Si una tabla depende de otra, la dependencia debe existir primero. Seguir los tiers en orden estricto.
+</div>
+
+<div class="tier-block">
+  <h4><span class="tier t0">Tier 0</span> — Sin dependencias externas (cargar primero)</h4>
+  <ul>
+    <li>companies</li>
+    <li>identity_account</li>
+    <li>game_catalog</li>
+    <li>payment_providers</li>
+    <li>notification_group_types</li>
+  </ul>
+</div>
+
+<div class="tier-block">
+  <h4><span class="tier t1">Tier 1</span> — Dependen de Tier 0</h4>
+  <ul>
+    <li>staff_user  (→ companies)</li>
+    <li>staff_role  (→ companies)</li>
+    <li>game_companies  (→ companies, game_catalog)</li>
+    <li>payment_methods  (→ companies, payment_providers)</li>
+    <li>hierarchies  (→ companies)</li>
+    <li>appsversions  (→ companies)</li>
+    <li>licenses  (→ companies) [NUEVO]</li>
+  </ul>
+</div>
+
+<div class="tier-block">
+  <h4><span class="tier t2">Tier 2</span> — Dependen de Tier 0-1</h4>
+  <ul>
+    <li>customers  (→ companies, hierarchies)</li>
+    <li>staff_company_assignment  (→ staff_user, companies)</li>
+    <li>staff_role_permission  (→ staff_role, staff_permission)</li>
+    <li>game_clients  (→ game_companies)</li>
+    <li>provider_payment_methods  (→ payment_providers, payment_methods)</li>
+    <li>purchase_cash_tags  (→ companies)</li>
+    <li>rollovers  (→ companies)</li>
+    <li>mechanics  (→ companies)</li>
+    <li>prizes  (→ companies)</li>
+    <li>draws  (→ prizes)</li>
+    <li>prize_roulettes  (→ prizes)</li>
+    <li>stores  (→ companies)</li>
+    <li>happy_hours  (→ companies)</li>
+    <li>promotional_banners  (→ companies)</li>
+    <li>referral_bonuses  (→ companies)</li>
+    <li>notification_groups  (→ companies, notification_group_types) [NUEVO]</li>
+    <li>credential_audit_log  (→ companies) [NUEVO]</li>
+  </ul>
+</div>
+
+<div class="tier-block">
+  <h4><span class="tier t3">Tier 3</span> — Dependen de customers (Tier 2)</h4>
+  <ul>
+    <li>customer_accounts  (→ customers, companies)</li>
+    <li>customer_tags  (→ customers)</li>
+    <li>blacklists  (→ customers, companies)</li>
+    <li>spams  (→ customers)</li>
+    <li>customer_hierarchies  (→ customers, hierarchies)</li>
+    <li>suggests  (→ customers, companies) [NUEVO]</li>
+    <li>notification_group_members  (→ notification_groups, customers) [NUEVO]</li>
+    <li>cashout_rules  (→ companies, payment_methods)</li>
+    <li>gateways  (→ companies, payment_providers)</li>
+    <li>draw_winners  (→ draws, customers)</li>
+    <li>roulette_winners  (→ prize_roulettes, customers)</li>
+    <li>products  (→ stores)</li>
+    <li>sales_records  (→ stores, customers)</li>
+    <li>image_slides  (→ companies)</li>
+    <li>content_modals  (→ companies)</li>
+    <li>promo_matches  (→ referral_bonuses, customers)</li>
+  </ul>
+</div>
+
+<div class="tier-block">
+  <h4><span class="tier t4">Tier 4</span> — Transacciones y movimientos (cargar al final)</h4>
+  <ul>
+    <li>movements  (→ customer_accounts, customers, companies)</li>
+    <li>account_ledger_entries  (→ customer_accounts)</li>
+    <li>transactions  (→ customers, companies, payment_methods, gateways)</li>
+    <li>transfer_platforms  (→ customers, companies)</li>
+    <li>sport_book_transactions  (→ customers, companies)</li>
+    <li>gateway_references  (→ transactions, gateways) [NUEVO]</li>
+  </ul>
+</div>
+
+<!-- =============================================
+     SECCIÓN 4 — Mapeo de Enums
+     ============================================= -->
+<h2>4. Mapeo de Enums</h2>
+
+<h3>4.1 — LedgerEntryType (account_ledger_entries)</h3>
+<div class="callout warn">
+  <strong>Mismatch detectado.</strong> wallet-service usa valores distintos a los del schema v3. El ETL debe mapear explícitamente antes de insertar.
+</div>
+<table>
+  <thead>
+    <tr>
+      <th>Valor en MongoDB (wallet-service)</th>
+      <th>Valor en PostgreSQL v3</th>
+      <th>Acción</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="enum-old">PURCHASE</span></td>
+      <td><span class="enum-new">PURCHASE</span></td>
+      <td><span class="tag-same">sin cambio</span></td>
+    </tr>
+    <tr>
+      <td><span class="enum-old">REDEEM</span></td>
+      <td><em>no existe</em></td>
+      <td><span class="tag-drop">mapear a WITHDRAWAL o crear REDEEM en v3</span></td>
+    </tr>
+    <tr>
+      <td><span class="enum-old">ADJUSTMENT</span></td>
+      <td><span class="enum-new">ADJUSTMENT</span></td>
+      <td><span class="tag-same">sin cambio</span></td>
+    </tr>
+    <tr>
+      <td><span class="enum-old">TRANSFER</span></td>
+      <td><em>no existe</em></td>
+      <td><span class="tag-drop">mapear a WITHDRAWAL o crear TRANSFER en v3</span></td>
+    </tr>
+    <tr>
+      <td><span class="enum-old">BONUS</span></td>
+      <td><span class="enum-new">BONUS</span></td>
+      <td><span class="tag-same">sin cambio</span></td>
+    </tr>
+    <tr>
+      <td><span class="enum-old">FEE</span></td>
+      <td><em>no existe</em></td>
+      <td><span class="tag-drop">agregar FEE al enum de v3 (recomendado)</span></td>
+    </tr>
+    <tr>
+      <td><em>no existe</em></td>
+      <td><span class="enum-new">DEPOSIT</span></td>
+      <td><span class="tag-map">nuevo en v3 — sin data Mongo directa</span></td>
+    </tr>
+    <tr>
+      <td><em>no existe</em></td>
+      <td><span class="enum-new">ROLLOVER</span></td>
+      <td><span class="tag-map">nuevo en v3 — sin data Mongo directa</span></td>
+    </tr>
+  </tbody>
+</table>
+<p><strong>Decisión pendiente con Backend:</strong> ¿REDEEM, TRANSFER, FEE se agregan al enum de v3 o se mapean a valores existentes? Confirmar antes de correr el ETL.</p>
+
+<h3>4.2 — AccountStatus (customer_accounts)</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Valor MongoDB (wallet-service)</th>
+      <th>Valor PostgreSQL v3</th>
+      <th>Acción</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="enum-same">ACTIVE</span></td>
+      <td><span class="enum-same">ACTIVE</span></td>
+      <td><span class="tag-same">sin cambio ✅</span></td>
+    </tr>
+    <tr>
+      <td><span class="enum-same">FROZEN</span></td>
+      <td><span class="enum-same">FROZEN</span></td>
+      <td><span class="tag-same">sin cambio ✅</span></td>
+    </tr>
+    <tr>
+      <td><span class="enum-same">CLOSED</span></td>
+      <td><span class="enum-same">CLOSED</span></td>
+      <td><span class="tag-same">sin cambio ✅</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>4.3 — LicenseType y LicenseStatus (licenses)</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Campo</th>
+      <th>Valores MongoDB (company-service)</th>
+      <th>Valores PostgreSQL v3</th>
+      <th>Acción</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>license_type</code></td>
+      <td><span class="enum-old">TRIAL, STANDARD, PREMIUM</span></td>
+      <td>Definir en DDL</td>
+      <td><span class="tag-map">agregar al schema v3</span></td>
+    </tr>
+    <tr>
+      <td><code>license_status</code></td>
+      <td><span class="enum-old">ACTIVE, EXPIRED, CANCELLED</span></td>
+      <td>Definir en DDL</td>
+      <td><span class="tag-map">agregar al schema v3</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- =============================================
+     SECCIÓN 5 — Campos especiales
+     ============================================= -->
+<h2>5. Campos Especiales</h2>
+
+<h3>5.1 — Timestamps</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Campo MongoDB</th>
+      <th>Columna PostgreSQL</th>
+      <th>Transformación</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="mongo">createdAt</code> (Date)</td>
+      <td><code class="pg">created_at TIMESTAMPTZ</code></td>
+      <td>Directo — MongoDB Date → PG TIMESTAMPTZ</td>
+    </tr>
+    <tr>
+      <td><code class="mongo">updatedAt</code> (Date)</td>
+      <td><code class="pg">updated_at TIMESTAMPTZ</code></td>
+      <td>Directo</td>
+    </tr>
+    <tr>
+      <td><code class="mongo">_id</code> (ObjectId timestamp)</td>
+      <td><code class="pg">created_at</code> (fallback)</td>
+      <td>Si createdAt no existe, extraer de <code>ObjectId.getTimestamp()</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>5.2 — Campos monetarios</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Tipo en MongoDB</th>
+      <th>Tipo en PostgreSQL</th>
+      <th>Notas</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="mongo">Number (float)</code></td>
+      <td><code class="pg">NUMERIC(18,2)</code></td>
+      <td>Redondear a 2 decimales. Verificar que no haya pérdida de precisión.</td>
+    </tr>
+    <tr>
+      <td><code class="mongo">Decimal128</code></td>
+      <td><code class="pg">NUMERIC(18,8)</code></td>
+      <td>Crypto amounts — mantener 8 decimales</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>5.3 — Soft deletes</h3>
+<table>
+  <thead>
+    <tr>
+      <th>MongoDB</th>
+      <th>PostgreSQL</th>
+      <th>Notas</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="mongo">deletedAt: Date | null</code></td>
+      <td><code class="pg">deleted_at TIMESTAMPTZ</code></td>
+      <td>Documentos con deletedAt != null → insertar con deleted_at seteado</td>
+    </tr>
+    <tr>
+      <td><code class="mongo">isDeleted: Boolean</code></td>
+      <td><code class="pg">deleted_at IS NOT NULL</code></td>
+      <td>Si isDeleted=true y no hay deletedAt → usar <code>migration_timestamp</code> como deleted_at</td>
+    </tr>
+  </tbody>
+</table>
+
+<footer style="margin-top:60px;padding-top:16px;border-top:1px solid #21262d;font-size:11px;color:#484f58">
+  DRAGON 2.0 — Trez Platform · ETL Guide · Generado 2026-06-12
+</footer>
+</body>
+</html>
